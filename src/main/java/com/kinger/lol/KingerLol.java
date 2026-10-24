@@ -1,4 +1,4 @@
-
+2
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -1384,3 +1384,6 @@ public class KingerLol implements ClientModInitializer {
             BlockPos b = found.get(i);
             int dist = (int) Math.sqrt(b.getSquaredDistance(p.getBlockPos()));
             p.sendMessage(Text.literal((i + 1) + ") " + b.getX() + " " + b.getY() + " " + b.getZ() + "  (" + dist + "m)"), false);
+        }
+    }
+}
