@@ -1,4 +1,4 @@
-package com.kinger.lol;
+
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -820,7 +820,7 @@ public class KingerLol implements ClientModInitializer {
 
     private static Vec3d predictArrowPos(ClientPlayerEntity p, PlayerEntity target) {
         Vec3d eye = p.getEyePos();
-        Vec3d tPos = target.getPos().add(0, target.getHeight() * 0.6, 0);
+        Vec3d tPos = target.getEntityPos().add(0, target.getHeight() * 0.6, 0);
         double dist = eye.distanceTo(tPos);
         Vec3d tv = target.getVelocity();
         double arrowSpeed = 3.0;
@@ -845,7 +845,7 @@ public class KingerLol implements ClientModInitializer {
             }
         }
         if (best == null) return;
-        lookAt(p, best.getPos());
+        lookAt(p, best.getEntityPos());
         mc.interactionManager.attackEntity(p, best);
         p.swingHand(Hand.MAIN_HAND);
     }
@@ -868,7 +868,7 @@ public class KingerLol implements ClientModInitializer {
             if (swordSlot < 0) swordSlot = findItemInHotbar(p, Items.DIAMOND_SWORD);
             if (swordSlot >= 0) {
                 select(p, swordSlot);
-                lookAt(p, nearestCrystal.getPos());
+                lookAt(p, nearestCrystal.getEntityPos());
                 mc.interactionManager.attackEntity(p, nearestCrystal);
                 p.swingHand(Hand.MAIN_HAND);
             }
@@ -1045,7 +1045,7 @@ public class KingerLol implements ClientModInitializer {
 
     private static void renderESP(DrawContext ctx, TextRenderer tr, MinecraftClient mc, ClientPlayerEntity p) {
         if (!PLAYER_ESP.on && !ITEM_ESP.on && !CHEST_ESP.on && !TRACERS.on) return;
-        Vec3d camPos = mc.gameRenderer.getCamera().getPos();
+        Vec3d camPos = mc.gameRenderer.getCamera().getCameraPos();
         float camYaw = mc.gameRenderer.getCamera().getYaw();
         float camPitch = mc.gameRenderer.getCamera().getPitch();
         int sw = ctx.getScaledWindowWidth(), sh = ctx.getScaledWindowHeight();
@@ -1058,7 +1058,7 @@ public class KingerLol implements ClientModInitializer {
                 if (o == p || !o.isAlive()) continue;
                 double d = p.distanceTo(o);
                 if (d > maxD) continue;
-                int[] sc = projectToScreen(o.getPos().add(0, o.getHeight() + 0.3, 0), camPos, camYaw, camPitch, sw, sh, focal);
+                int[] sc = projectToScreen(o.getEntityPos().add(0, o.getHeight() + 0.3, 0), camPos, camYaw, camPitch, sw, sh, focal);
                 if (sc == null) continue;
                 if (PLAYER_ESP.on) {
                     String label = o.getName().getString() + " " + (int) d + "m " + (int) Math.ceil(o.getHealth()) + "hp";
@@ -1083,7 +1083,7 @@ public class KingerLol implements ClientModInitializer {
                 if (!isItem && !isChest) continue;
                 if (isItem && !ITEM_ESP.on) continue;
                 if (isChest && !CHEST_ESP.on) continue;
-                int[] sc = projectToScreen(e.getPos().add(0, 0.5, 0), camPos, camYaw, camPitch, sw, sh, focal);
+                int[] sc = projectToScreen(e.getEntityPos().add(0, 0.5, 0), camPos, camYaw, camPitch, sw, sh, focal);
                 if (sc == null) continue;
                 String label = isItem ? "Item " + (int) d + "m" : "Chest " + (int) d + "m";
                 int w = tr.getWidth(label);
@@ -1384,6 +1384,3 @@ public class KingerLol implements ClientModInitializer {
             BlockPos b = found.get(i);
             int dist = (int) Math.sqrt(b.getSquaredDistance(p.getBlockPos()));
             p.sendMessage(Text.literal((i + 1) + ") " + b.getX() + " " + b.getY() + " " + b.getZ() + "  (" + dist + "m)"), false);
-        }
-    }
-                                         }
