@@ -1,44 +1,16 @@
-plugins {
-    id 'fabric-loom' version "${loom_version}"
-    id 'maven-publish'
-}
+org.gradle.jvmargs=-Xmx1G
+org.gradle.parallel=true
 
-version = project.mod_version
-group = project.maven_group
+# Fabric Properties (1.21.1)
+minecraft_version=1.21.1
+yarn_mappings=1.21.1+build.3
+loader_version=0.16.0
+loom_version=1.7-SNAPSHOT
 
-base {
-    archivesName = project.archives_base_name
-}
+# Mod Properties
+mod_version=4.0.0
+maven_group=com.kinger.lol
+archives_base_name=kingerlol
 
-repositories {
-    mavenCentral()
-    maven { url = 'https://maven.fabricmc.net/' }
-}
-
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-}
-
-processResources {
-    inputs.property "version", project.version
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
-    it.options.encoding = "UTF-8"
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-tasks.withType(Javadoc).configureEach {
-    enabled = false
-}
+# Dependencies
+fabric_api_version=0.102.0+1.21.11
